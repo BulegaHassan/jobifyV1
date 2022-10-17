@@ -9,6 +9,11 @@ import {
   UPDATE_USER_ERROR,
   TOGGLE_SIDEBAR,
   LOGOUT_USER,
+  HANDLE_CHANGE,
+  CLEAR_VALUES,
+  CREATE_JOB_BEGIN,
+  CREATE_JOB_SUCCESS,
+  CREATE_JOB_ERROR,
 } from "./actions";
 import { initialState } from "./appContext";
 
@@ -29,7 +34,7 @@ const reducer = (state, action) => {
       alertText: "",
     };
   }
-// setup user
+  // setup user
   if (action.type === SETUP_USER_BEGIN) {
     return {
       ...state,
@@ -59,34 +64,34 @@ const reducer = (state, action) => {
     };
   }
   // update user
-if (action.type === UPDATE_USER_BEGIN) {
-  return {
-    ...state,
-    isLoading: true,
-  };
-}
-if (action.type === UPDATE_USER_SUCCESS) {
-  return {
-    ...state,
-    isLoading: false,
-    token: action.payload.token,
-    user: action.payload.user,
-    userLocation: action.payload.userLocation,
-    jobLocation: action.payload.jobLocation,
-    showAlert: true,
-    alertType: "success",
-    alertText: "User Profile Updated",
-  };
-}
-if (action.type === UPDATE_USER_ERROR) {
-  return {
-    ...state,
-    isLoading: false,
-    showAlert: true,
-    alertType: "danger",
-    alertText: action.payload.msg,
-  };
-}
+  if (action.type === UPDATE_USER_BEGIN) {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  }
+  if (action.type === UPDATE_USER_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      token: action.payload.token,
+      user: action.payload.user,
+      userLocation: action.payload.userLocation,
+      jobLocation: action.payload.jobLocation,
+      showAlert: true,
+      alertType: "success",
+      alertText: "User Profile Updated",
+    };
+  }
+  if (action.type === UPDATE_USER_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
+    };
+  }
 
   //toggle sidebar
 
@@ -104,6 +109,53 @@ if (action.type === UPDATE_USER_ERROR) {
       token: null,
       userLocation: "",
       jobLocation: "",
+    };
+  }
+  // handle change
+  if (action.type === HANDLE_CHANGE) {
+    return {
+      ...state,
+      [action.payload.name]: action.payload.value,
+    };
+  }
+  // clear values
+  if (action.type === CLEAR_VALUES) {
+    const initialState = {
+      isEditing: false,
+      editJobId: "",
+      position: "",
+      company: "",
+      // jobLocation: state.jobLocation,
+      jobLocation: "",
+      jobType: "full-time",
+      status: "pending",
+    };
+    return { ...state, ...initialState };
+  }
+  // create job
+
+  if (action.type === CREATE_JOB_BEGIN) {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  }
+  if (action.type === CREATE_JOB_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "success",
+      alertText: "New Job Created",
+    };
+  }
+  if (action.type === CREATE_JOB_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
     };
   }
 
