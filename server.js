@@ -12,10 +12,10 @@ import jobsRouter from "./routes/jobsRoutes.js";
 //middleware
 import notFoundMiddleware from "./middleware/not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
-import authenticateUser from './middleware/auth.js'
+import authenticateUser from "./middleware/auth.js";
 
-if(process.env.NODE_ENV !== 'production'){
-  app.use(morgan('dev'))
+if (process.env.NODE_ENV !== "production") {
+  app.use(morgan("dev"));
 }
 // built-in middleware to enable json
 app.use(express.json());
@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 });
 // routes
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/jobs", authenticateUser,jobsRouter); // authenticate all routes in jobRouter
+app.use("/api/v1/jobs", authenticateUser, jobsRouter); // authenticate all routes in jobRouter
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
