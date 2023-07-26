@@ -26,6 +26,7 @@ import {
   EDIT_JOB_ERROR,
   SHOW_STATS_BEGIN,
   SHOW_STATS_SUCCESS,
+  CLEAR_FILTERS,
 } from "./actions";
 
 const token = localStorage.getItem("token");
@@ -54,8 +55,13 @@ const initialState = {
   totalJobs: 0,
   numOfPages: 1,
   page: 1,
-  stats:{},
-  monthlyApplications:[],
+  stats: {},
+  monthlyApplications: [],
+  search: "",
+  searchStatus: "all",
+  searchType: "all",
+  sort: "latest",
+  sortOptions: ["latest", "oldest", "a-z", "z-a"],
 };
 
 const AppContext = React.createContext();
@@ -171,7 +177,7 @@ const AppProvider = ({ children }) => {
   const clearValues = () => {
     dispatch({ type: CLEAR_VALUES });
   };
-  const createJob = async () => { 
+  const createJob = async () => {
     dispatch({ type: CREATE_JOB_BEGIN });
     try {
       const { position, company, jobLocation, jobType, status } = state;
@@ -197,7 +203,11 @@ const AppProvider = ({ children }) => {
   };
 
   const getJobs = async () => {
-    let url = `/jobs`;
+    const { search, searchStatus, searchType, sort } = state;
+    let url = `/jobs?status=${searchStatus}&jobType=${searchType}&sort=${sort}`;
+    if (search) {
+      url = url + `&search=${search}`;
+    }
     dispatch({ type: GET_JOBS_BEGIN });
     try {
       const { data } = await authFetch(url);
@@ -239,7 +249,7 @@ const AppProvider = ({ children }) => {
         payload: { msg: error.response.data.msg },
       });
     }
-    clearAlert()
+    clearAlert();
   };
   const deleteJob = async (jobId) => {
     dispatch({ type: DELETE_JOB_BEGIN });
@@ -250,24 +260,26 @@ const AppProvider = ({ children }) => {
       logoutUser();
     }
   };
-  const showStats = async ()=> {
-    dispatch({type:SHOW_STATS_BEGIN})
+  const showStats = async () => {
+    dispatch({ type: SHOW_STATS_BEGIN });
     try {
-      const {data}= await authFetch('/jobs/stats')
+      const { data } = await authFetch("/jobs/stats");
       dispatch({
-        type:SHOW_STATS_SUCCESS,
+        type: SHOW_STATS_SUCCESS,
         payload: {
-          stats:data.defaultStats,
-          monthlyApplications:data.monthlyApplications,
-        }
-      })
-      clearAlert()
+          stats: data.defaultStats,
+          monthlyApplications: data.monthlyApplications,
+        },
+      });
+      clearAlert();
     } catch (error) {
       console.log(error.response);
-      logoutUser()
+      logoutUser();
     }
-  }
-
+  };
+  const clearFilters = () => {
+    dispatch({ type: CLEAR_FILTERS });
+  };
   return (
     <AppContext.Provider
       value={{
@@ -286,6 +298,7 @@ const AppProvider = ({ children }) => {
         deleteJob,
         editJob,
         showStats,
+        clearFilters,
       }}
     >
       {children}
