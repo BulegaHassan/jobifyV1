@@ -221,9 +221,8 @@ const AppProvider = ({ children }) => {
           numOfPages,
         },
       });
-    } catch (error) {
-      console.log(error.response);
-      // logoutUser();
+    } catch (error) {      
+      logoutUser();
     }
     clearAlert();
   };
@@ -273,8 +272,7 @@ const AppProvider = ({ children }) => {
         },
       });
       clearAlert();
-    } catch (error) {
-      console.log(error.response);
+    } catch (error) {      
       logoutUser();
     }
   };

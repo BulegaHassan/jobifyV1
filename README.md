@@ -5341,6 +5341,7 @@ app.use('/api/v1/jobs', authenticateUser, jobsRouter)
 app.get('*', function (request, response) {
   response.sendFile(path.resolve(__dirname, './client/build', 'index.html'))
 })
+// run node server from the root
 ```
 
 #### Security Packages
