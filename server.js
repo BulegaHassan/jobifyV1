@@ -4,6 +4,10 @@ import dotenv from "dotenv";
 dotenv.config();
 import "express-async-errors";
 import morgan from "morgan";
+import helmet from "helmet";
+import xss from "xss-clean";
+import mongoSanitize from "express-mongo-sanitize";
+
 
 import { dirname } from "path";
 import { fileURLToPath } from "url";
@@ -24,8 +28,11 @@ if (process.env.NODE_ENV !== "production") {
 // built-in middleware to enable json
 app.use(express.json());
 
+app.use(helmet());
+app.use(xss());
+app.use(mongoSanitize());
 const __dirname = dirname(fileURLToPath(import.meta.url));
-
+//only when ready to deploy
 app.use(express.static(path.resolve(__dirname, "./client/build")));
 
 app.get("/", (req, res) => {
