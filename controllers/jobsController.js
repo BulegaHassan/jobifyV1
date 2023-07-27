@@ -25,7 +25,7 @@ const getAllJobs = async (req, res) => {
   if (status && status !== "all") {
     queryObject.status = status;
   }
-  if (job && jobType !== "all") {
+  if (jobType && jobType !== "all") {
     queryObject.jobType = jobType;
   }
   if (search) {
