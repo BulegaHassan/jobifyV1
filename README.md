@@ -5422,3 +5422,12 @@ web: node server.js
 - add env variables
 - git push heroku main/master
 
+#### Prepare for deployment
+- in client remove build and node modules
+- in server remove node modules
+```json
+
+"scripts": {
+  "setup-production":"npm run install-client && npm run build-client && npm install",
+  "install-client":"cd client && npm install"
+}
